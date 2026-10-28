@@ -1,7 +1,7 @@
 name: Validate card sorting
 on:
   push:
-    branches: [ux/ayudas-card-sorting]
+    branches: [main, ux/ayudas-card-sorting]
   pull_request:
     branches: [main]
 permissions:
@@ -22,27 +22,3 @@ jobs:
           name: card-sorting-pages
           path: docs/
           include-hidden-files: true
-  prepare-pages:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/ux/ayudas-card-sorting'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ux/ayudas-card-sorting
-      - uses: actions/download-artifact@v4
-        with:
-          name: card-sorting-pages
-          path: compiled-pages
-      - name: Update generated Pages bundle
-        run: |
-          rm -rf docs/assets
-          cp -R compiled-pages/. docs/
-          git add docs
-          if git diff --cached --quiet; then exit 0; fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Build Pages bundle for participant guidance'
-          git push origin HEAD:ux/ayudas-card-sorting
