@@ -1,7 +1,7 @@
 name: Validate card sorting
 on:
   push:
-    branches: [main, ux/ayudas-card-sorting]
+    branches: [main, ux/recuperar-grupos]
   pull_request:
     branches: [main]
 permissions:
@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: 22
       - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm test
       - run: npm run build
       - run: touch docs/.nojekyll
       - uses: actions/upload-artifact@v4
@@ -22,3 +23,27 @@ jobs:
           name: card-sorting-pages
           path: docs/
           include-hidden-files: true
+  prepare-pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/ux/recuperar-grupos'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ux/recuperar-grupos
+      - uses: actions/download-artifact@v4
+        with:
+          name: card-sorting-pages
+          path: compiled-pages
+      - name: Update generated Pages bundle
+        run: |
+          rm -rf docs/assets
+          cp -R compiled-pages/. docs/
+          git add docs
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Build Pages with category recovery and card return'
+          git push origin HEAD:ux/recuperar-grupos

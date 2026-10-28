@@ -28,3 +28,12 @@
 .general-help ol{padding-left:23px;margin:10px 0}
 .general-help li,.general-help>p{font-size:14px;line-height:1.8;color:#425d4b;margin:0 0 12px}
 .new-group .field-help{font-size:13px}
+
+.restore-groups{background:#fff;border:1px solid #d5dfce;border-radius:10px;padding:18px;margin-bottom:18px}
+.restore-groups h2{font-size:16px;margin-bottom:8px}
+.restore-groups p{font-size:13px;line-height:1.7;color:#425d4b}
+.restore-groups>div{display:flex;flex-wrap:wrap;gap:10px}
+.restore-groups button{white-space:normal;text-align:left;justify-content:flex-start}
+.return-card{display:flex;align-items:center;gap:8px;min-height:44px;margin-top:8px;padding:10px 0;border:0;background:transparent;color:#32533c;font-size:13px;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.return-card svg{flex-shrink:0}
+@media(max-width:600px){.restore-groups button{width:100%}}
